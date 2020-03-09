@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 20)->unique();
             $table->string('email')->unique();
             $table->string('password', 256);
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(1)->nullable();
             $table->boolean('view_orders')->default(0)->nullable();
             $table->boolean('manager_editor')->default(0)->nullable();
             $table->boolean('manage_rate')->default(0)->nullable();

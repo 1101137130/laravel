@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Controllers\Controller;
 use App\Item;
 use Exception;
 use Illuminate\Http\Request;
+
 
 class ItemController extends Controller
 {
@@ -22,7 +24,7 @@ class ItemController extends Controller
         ]);
     }
 
-    public function delete(Request $request, Item $item)
+    public function destroy(Request $request, Item $item)
     {
         try {
             $item->delete();
@@ -32,8 +34,26 @@ class ItemController extends Controller
             return $e;
         }
     }
+
+    public function show($id)
+    {
+        $item = Item::find($id);
+        return redirect('item');
+    }
+
+    public function edit($id)
+    {
+        $item = Item::find($id);
+        return view('item.edit', [
+            'item' => $item
+        ]);
+    }
     public function update(Request $request, Item $item)
     {
+        $this->validate($request, [
+            'itemname' => 'required|max:15',
+            'rate' => 'required',
+        ]);
         try {
             $item->update();
             $request->session()->flash('status', '更改成功！');
@@ -43,8 +63,13 @@ class ItemController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
+
+        $this->validate($request, [
+            'itemname' => 'required|max:15',
+            'rate' => 'required',
+        ]);
 
         try {
             $item = Item::create($request->all());

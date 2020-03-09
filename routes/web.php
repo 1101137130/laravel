@@ -18,6 +18,8 @@ Route::get('/', function () {
 $q=Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/item', 'ItemController@index')->name('item');
-Route::post('/item', 'ItemController@create')->name('item');
-Route::delete('/item/{item}', 'ItemController@delete');
+Route::resource('item', 'ItemController');
+Route::resource('order', 'OrderController');
+Route::get('/game', 'HomeController@game')->name('game');
+Route::post('/game', 'HomeController@clientorder')->name('game');
+

@@ -15,7 +15,7 @@ class CreateAmountsTable extends Migration
     {
         Schema::create('amounts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->unsigned();
             $table->decimal('amount', 18, 4);
             $table->Integer('created_at');
             $table->Integer('updated_at');
