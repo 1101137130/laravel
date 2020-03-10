@@ -38,13 +38,17 @@
                     <h1>閒家</h1>
                 </td>
             </tr>
-
+            @if (session('status'))
+            <div class="alert alert-success">
+                <strong>{{ session('status') }}
+            </div>
+            @endif
             <tr style="height: 18px;">
                 <td style="width: 50.3317%; height: 18px; text-align: center;">
 
                     <select name="object1winlost">
-                        <option value="{{$win->id}}" selected="selected">{{$win->itemname.' : '.$win->rate}}</option>
-                        <option value="{{$lost->id}}">{{$lost->itemname.' : '.$lost->rate}}</option>
+                        <option value="{{$win}}" selected="selected">{{$win->itemname.' : '.$win->rate}}</option>
+                        <option value="{{$lost}}">{{$lost->itemname.' : '.$lost->rate}}</option>
                     </select>
 
                     <input type="number" name="object1winlostamount" placeholder="請輸入金額" step="5" min="0">
@@ -53,8 +57,8 @@
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
 
                     <select name="object2winlost">
-                        <option value="{{$win->id}}" selected="selected">{{$win->itemname.' : '.$win->rate}}</option>
-                        <option value="{{$lost->id}}">{{$lost->itemname.' : '.$lost->rate}}</option>
+                        <option value="{{$win}}" selected="selected">{{$win->itemname.' : '.$win->rate}}</option>
+                        <option value="{{$lost}}">{{$lost->itemname.' : '.$lost->rate}}</option>
                     </select>
 
                     <input type="number" name="object2winlostamount" placeholder="請輸入金額" step="5" min="0">
@@ -67,17 +71,17 @@
 
                     <select name="object1bigsmall">
                         <option value="{{$big}}" selected="selected">{{$big->itemname.' : '.$big->rate}}</option>
-                        <option value="{{$small->id}}">{{$small->itemname.' : '.$small->rate}}</option>
+                        <option value="{{$small}}">{{$small->itemname.' : '.$small->rate}}</option>
                     </select>
-                   
+
                     <input type="number" name="object1bigsmallamount" placeholder="請輸入金額" step="5" min="0">
                 </td>
 
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
 
                     <select name="object2bigsmall">
-                        <option value="{{$big->id}}" selected="selected">{{$big->itemname.' : '.$big->rate}}</option>
-                        <option value="{{$small->id}}">{{$small->itemname.' : '.$small->rate}}</option>
+                        <option value="{{$big}}" selected="selected">{{$big->itemname.' : '.$big->rate}}</option>
+                        <option value="{{$small}}">{{$small->itemname.' : '.$small->rate}}</option>
                     </select>
 
                     <input type="number" name="object2bigsmallamount" placeholder="請輸入金額" step="5" min="0">
@@ -89,8 +93,8 @@
                 <td style="width: 50.3317%; height: 18px; text-align: center;">
 
                     <select name="object1singledoble">
-                        <option value="{{$single->id}}" selected="selected">{{$single->itemname.' : '.$single->rate}}</option>
-                        <option value="{{$doble->id}}">{{$doble->itemname.' : '.$doble->rate}}</option>
+                        <option value="{{$single}}" selected="selected">{{$single->itemname.' : '.$single->rate}}</option>
+                        <option value="{{$doble}}">{{$doble->itemname.' : '.$doble->rate}}</option>
                     </select>
 
                     <input type="number" name="object1singledobleamount" placeholder="請輸入金額" step="5" min="0">
@@ -99,8 +103,8 @@
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
 
                     <select name="object2singledoble">
-                        <option value="{{$single->id}}" selected="selected">{{$single->itemname.' : '.$single->rate}}</option>
-                        <option value="{{$doble->id}}">{{$doble->itemname.' : '.$doble->rate}}</option>
+                        <option value="{{$single}}" selected="selected">{{$single->itemname.' : '.$single->rate}}</option>
+                        <option value="{{$doble}}">{{$doble->itemname.' : '.$doble->rate}}</option>
                     </select>
 
                     <input type="number" name="object2singledobleamount" placeholder="請輸入金額" step="5" min="0">

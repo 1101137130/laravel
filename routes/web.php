@@ -22,4 +22,6 @@ Route::resource('item', 'ItemController');
 Route::resource('order', 'OrderController');
 Route::get('/game', 'HomeController@game')->name('game');
 Route::post('/game', 'HomeController@clientorder')->name('game');
+Route::get('/amount', 'AmountController@amount')->name('amount');
+Route::post('/amount', 'AmountController@store')->name('amount');
 
