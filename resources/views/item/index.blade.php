@@ -24,14 +24,6 @@
         @endforeach
     </table>
 
-
-
-    @if (session('status'))
-    <div class="alert alert-success">
-        <strong>{{ session('status') }}
-    </div>
-    @endif
-
     <form action="{{url('item')}}" method="POST">
         {{csrf_field()}}
         @if ($errors->has('itemname'))

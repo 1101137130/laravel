@@ -1,8 +1,5 @@
-@if (session('status'))
-<div class="alert alert-success">
-    <strong>{{ session('status') }}
-</div>
-@endif
+@extends('logouts.app')
+@section('content')
 <section class="conrainer">
     <form action="{{url('item/'.$item->id.'edit')}}" method="POST">
         {{csrf_field()}}

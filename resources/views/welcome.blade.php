@@ -72,7 +72,7 @@
         @if (Route::has('login'))
         <div class="top-right links">
             @if (Auth::check())
-            <a href="{{ url('/item') }}">Item</a>
+         
             <a href="{{ url('/home') }}">Home</a>
             @else
             <a href="{{ url('/login') }}">Login</a>
@@ -80,12 +80,13 @@
             @endif
         </div>
         @endif
-
+       
         <div class="content">
+       
             <div class="title m-b-md">
                 Checkers Game
             </div>
-
+            
             <div class="links">
                 <a href="{{url('game')}}">Play</a>
                 <a href="">Rules</a>
