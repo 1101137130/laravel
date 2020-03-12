@@ -5,38 +5,39 @@ namespace App\CheckersClass;
 use App\Order;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use App\CheckersClass\checkUserAmountClass;
-use App\CheckersClass\checkRateTheSameClass;
+use App\CheckersClass\checkUserAmount;
+use App\CheckersClass\checkRateTheSame;
 
 class orderCreate
 {
-    public function new($request, $amount, $bet_object) //order處理
+    public static function new($item) //order處理
     {
-        $user = Auth::user();
-        if (checkUserAmountClass::check($user, $amount)) {
+        //item[0]-> itemname; item[1]->itemid  
+        //item[2]-> rate ; item[3] -> amount 
+        //item[4]-> ocject 1:莊家 2:閒家
 
-            $request = json_decode($request);
-            $checkrate = checkRateTheSameClass::check($request->id, $request->rate);
-            
+        $user = Auth::user();
+        $error = checkUserAmount::check($user, $item[3]);
+        if ($error == true) {
+            $checkrate = checkRateTheSame::check($item[1], $item[2]);
             if ($checkrate == false) {
-                $error = '賠率已變動';
+                $error = '賠率已變動請重新下單！';
                 return $error;
             }
 
-            if ($request != false) {
-                try {
-                    Order::create([
-                        'username' => $user->username,
-                        'user_id' => $user->id,
-                        'item_id' => $request->id,
-                        'amount' => $amount,
-                        'bet_object' => $bet_object,
-                        'status' => 1, //新建
-                        'item_rate' => $request->rate
-                    ]);
-                } catch (Exception $error) {
-                    return $error;
-                }
+            try {
+                Order::create([
+                    'username' => $user->username,
+                    'user_id' => $user->id,
+                    'item_id' => $item[1],
+                    'amount' => $item[3],
+                    'bet_object' => $item[4],
+                    'status' => 1, //新建
+                    'item_rate' => $item[2]
+                ]);
+                
+            } catch (Exception $error) {
+                return $error;
             }
         } else {
             return $error;

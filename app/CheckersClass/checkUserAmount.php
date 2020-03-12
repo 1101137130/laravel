@@ -6,9 +6,9 @@ use Exception;
 use App\Amount;
 use App\AmountRecord;
 
-class checkUserAmountClass
+class checkUserAmount
 {
-    public function check($user, $amount)
+    public static function check($user, $amount)
     {
 
         $amountmodel = Amount::where('user_id', $user->id)->first();
@@ -21,6 +21,7 @@ class checkUserAmountClass
             return $error;
         } else {
             $updateamount = $useramount - $amount;
+            $amount = $amount * -1;
             try {
                 Amountrecord::create(['user_id' => $user->id, 'amount' => $amount, 'status' => 1]);
                 $amountmodel->update(['amount' => $updateamount]);
@@ -31,4 +32,5 @@ class checkUserAmountClass
             }
         }
     }
+    
 }

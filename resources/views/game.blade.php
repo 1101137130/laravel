@@ -5,26 +5,32 @@
 <table class="table table-hover">
     <tbody>
         <tr style="height: 18px;">
-            <td style="width: 21.4228%; height: 18px; border-color: #000000;">&nbsp;</td>
-            <td style="width: 25.4878%; text-align: center; height: 18px;">第一局</td>
-            <td style="width: 28.0894%; text-align: center; height: 18px;">第二局</td>
-            <td style="width: 25%; text-align: center; height: 18px;">第三局</td>
+            <td></td>
+            <td style="width: 25.4878%; text-align: center;">第一局</td>
+            <td style="width: 28.0894%; text-align: center;">第二局</td>
+            <td style="width: 25%; text-align: center;">第三局</td>
         </tr>
         <tr style="height: 18px;">
-            <td style="width: 21.4228%; text-align: center;height: 18px;">莊家 ：</td>
-            <td style="width: 25.4878%; text-align: center; height: 18px;">&nbsp;</td>
-            <td style="width: 28.0894%; text-align: center; height: 18px;">&nbsp;</td>
-            <td style="width: 25%; text-align: center; height: 18px;">&nbsp;</td>
+            <td style="text-align: center;">莊家 ：</td>
+            <td id="ob1one" style="text-align: center;"></td>
+            <td id="ob1two" style="text-align: center;"></td>
+            <td id="ob1three" style="text-align: center;"></td>
         </tr>
-        <tr style="height: 10px;">
-            <td style="width: 21.4228%; text-align: center;height: 10px;">閒家 ：</td>
-            <td style="width: 25.4878%; text-align: center; height: 10px;">&nbsp;</td>
-            <td style="width: 28.0894%; text-align: center; height: 10px;">&nbsp;</td>
-            <td style="width: 25%; text-align: center; height: 10px;">&nbsp;</td>
+        <tr style="height: 18px;">
+            <td style="text-align: center;">閒家 ：</td>
+            <td id="ob2one" style="text-align: center;"></td>
+            <td id="ob2two" style="text-align: center;"></td>
+            <td id="ob2three" style="text-align: center;"></td>
+        </tr>
+        <tr style="height: 18px;">
+            <td style="text-align: center;">賽果：</td>
+            <td id="win1" style="text-align: center;"></td>
+            <td id="win2" style="text-align: center;"></td>
+            <td id="win3" style="text-align: center;"></td>
         </tr>
     </tbody>
 </table>
-<hr />
+
 <form action="{{url('game')}}" method="POST">
     {{csrf_field()}}
     <table class="table table-hover">
@@ -38,16 +44,7 @@
                     <h1>閒家</h1>
                 </td>
             </tr>
-            <!-- @if (session('status'))
-            <div class="alert alert-success">
-                <strong>{{ session('status') }}
-            </div>
-            @endif
-            @if (session('error'))
-            <div class="alert alert-danger">
-                <strong>{{ session('error') }}
-            </div>
-            @endif -->
+
             <tr style="height: 18px;">
                 <td style="width: 50.3317%; height: 18px; text-align: center;">
 
@@ -56,7 +53,7 @@
                         <option value="{{$lost}}">{{$lost->itemname.' : '.$lost->rate}}</option>
                     </select>
 
-                    <input id="object1winlostamount" type="number" onchange="orders('object1winlost',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                    <input id="object1winlostamount" type="number" onchange="dataToNap('object1winlost',this.id,1)" placeholder="請輸入金額" step="5" min="0">
 
                 </td>
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
@@ -66,7 +63,7 @@
                         <option value="{{$lost}}">{{$lost->itemname.' : '.$lost->rate}}</option>
                     </select>
 
-                    <input type="number" id="object2winlostamount" onchange="orders('object2winlost',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                    <input type="number" id="object2winlostamount" onchange="dataToNap('object2winlost',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                 </td>
             </tr>
@@ -79,7 +76,7 @@
                         <option value="{{$small}}">{{$small->itemname.' : '.$small->rate}}</option>
                     </select>
 
-                    <input type="number" id="object1bigsmallamount" onchange="orders('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                    <input type="number" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
                 </td>
 
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
@@ -89,7 +86,7 @@
                         <option value="{{$small}}">{{$small->itemname.' : '.$small->rate}}</option>
                     </select>
 
-                    <input type="number" id="object2bigsmallamount" onchange="orders('object2bigsmall',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                    <input type="number" id="object2bigsmallamount" onchange="dataToNap('object2bigsmall',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                 </td>
             </tr>
@@ -102,7 +99,7 @@
                         <option value="{{$doble}}">{{$doble->itemname.' : '.$doble->rate}}</option>
                     </select>
 
-                    <input type="number" id="object1singledobleamount" onchange="orders('object1singledoble',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                    <input type="number" id="object1singledobleamount" onchange="dataToNap('object1singledoble',this.id,1)" placeholder="請輸入金額" step="5" min="0">
 
                 </td>
                 <td style="width: 49.6683%; height: 18px; text-align: center;">
@@ -112,7 +109,7 @@
                         <option value="{{$doble}}">{{$doble->itemname.' : '.$doble->rate}}</option>
                     </select>
 
-                    <input type="number" id="object2singledobleamount" onchange="orders('object2singledoble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                    <input type="number" id="object2singledobleamount" onchange="dataToNap('object2singledoble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                 </td>
             </tr>
@@ -146,90 +143,116 @@
         <a class="btn btn-danger" href="{{url('game')}}" role="btn">清空</a>
     </div>
 </form>
-@foreach ($items as $item)
-<table>
-    <tr>
-        <td>
-            注項名稱：{{$item->itemname.':'}} >
-        </td>
-        <td>
-            賠率為：{{'rate :'.$item->rate}}
-        </td>
-    </tr>
-</table>
-@endforeach
+<div style="text-align: center;">
+    <table>
+        @foreach ($items as $item)
+        <tr>
+            <td>
+                注項名稱：{{$item->itemname.':'}} >
+            </td>
+            <td>
+                賠率為：{{'rate :'.$item->rate}}
+            </td>
+        </tr>
+        @endforeach
+    </table>
+</div>
 
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
 </script>
 
 <script>
-    var ordersarray = new Array();
-    ordersarray[0] = new Array();
-    ordersarray[1] = new Array();
-    const order = new Map();
+    const order = new Map(); //建立一個外部map來存放使用者選擇的資料
 
-    function action() {
+    function alertcontents() { //建立確認訊息來提供使用者作確認是否下注用
+        var array = new Array();
+
+        for (var i = 0; i < ordersarray.length; i++) {
+            array.push('項目：' + convertObjectToName(ordersarray[i][4]) + ordersarray[i][0] + ' | ' +
+                '賠率為：' + ordersarray[i][2] + '\n')
+        }
+        return array;
+    }
+
+    function convertObjectToName(object) {
+        if (object == 1) {
+            return '莊家'
+        }
+        if (object == 2) {
+            return '閒家'
+        }
+    }
+
+    function mapToString() { //建立一個string來接map裡的資料 
+        var ordersarray = new Array(); //因為map不能轉成json 所以不能傳道後台
         var i = 0;
-        for (let entry of order.values()) { // the same as of recipeMap.entries()
+        for (let entry of order.keys()) {
             var j = 0;
-            ordersarray[i] = entry;
-            for (let e of entry.values()) {
-                ordersarray[i][j] = e
+            ordersarray[i] = new Array();
+            ordersarray[i][j] = new Array();
 
+            for (let e of order.get(entry)) {
+                ordersarray[i][j] = e[1]
                 j++;
             }
             i++
         }
-        var array = new Array();
-        for (var i = 0; i < order.size; i++) {
-
-            if (ordersarray[i][4] == 1) {
-                ordersarray[i][4] = '莊家'
-            }
-            if (ordersarray[i][4] == 2) {
-                ordersarray[i][4] = '閒家'
-            }
-            array.push('項目：' + ordersarray[i][4] + ordersarray[i][0] + ' | ' +
-                '賠率為：' + ordersarray[i][2] + '\n')
-        }
-        if (order.size > 0) {
-            var yes = confirm(array + '\n' + '你確定嗎？')
-
-            if (yes) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{url('game')}}",
-                    dataType: "json",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: order,
-                    success: function(data) {
-                        alert(data)
-                    },
-                    error: function(jqXHR) {
-                    }
-                })
-
-
-
-            } else {
-
-            }
-        }
-
-
-        // alert(array)
-
-
+        return ordersarray
     }
 
-    function orders(id, amountid, object) {
+    function ajaxBack(ordersarray) {
+        $.ajax({
+            type: "POST",
+            url: "{{url('game')}}",
+            dataType: "json",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                order: JSON.stringify(ordersarray)
+            },
+            success: function(data) {
+                 $('#ob1one').html(data[0]['object1']['card']);
+                 $('#ob1two').html(data[1]['object1']['card']);
+                 $('#ob1three').html(data[2]['object1']['card']);
+                // $('#ob1two').html(data[1][0]['card']);
+                // $('#ob1three').html(data[2][0]['card']);
+                 $('#ob2one').html(data[0]['object2']['card']);
+                 $('#ob2two').html(data[1]['object2']['card']);
+                 $('#ob2three').html(data[2]['object2']['card']);
+                // $('#ob2two').html(data[1][1]['card']);
+                // $('#ob2three').html(data[2][1]['card']);
+                 $('#win1').html(data[0][0]['result']);
+                 $('#win2').html(data[1][0]['result']);
+                 $('#win3').html(data[2][0]['result']);
+                console.log(data)
+            },
+            error: function(jqXHR) {
+                console.log(jqXHR)
+            }
+        })
+    }
+
+    function action() {
+        ordersarray = mapToString();
+
+        if (ordersarray.length > 0) {
+            var array = alertcontents();
+            var yes = confirm(array + '\n' + '你確定嗎？')
+            if (yes) {
+                ajaxBack(ordersarray);
+            } else {
+                location.reload();
+            }
+        }
+    }
+
+    function dataToNap(id, amountid, object) {
         var item = JSON.parse(document.getElementById(id).value)
         var amount = document.getElementById(amountid).value
-
+        //金額不為0則新增一個map 並放入 外部map-order
+        //金額為0則判斷外部map有無此id 有則做刪除
         if (amount != 0) {
             const ord = new Map();
             ord.set('itemname', item['itemname'])

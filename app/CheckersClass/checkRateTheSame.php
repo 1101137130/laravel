@@ -2,14 +2,11 @@
 
 namespace App\CheckersClass;
 
-use Exception;
-use App\Amount;
-use App\AmountRecord;
 use App\Item;
 
-class checkRateTheSameClass
+class checkRateTheSame
 {
-    public function check($id, $rate)
+    public static function check($id, $rate)
     {
         $itemrate=Item::find($id);
         if($itemrate->rate == $rate){

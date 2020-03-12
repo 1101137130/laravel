@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Item;
+use App\CheckersClass\gameStart;
+use App\CheckersClass\gameEnd;
 use App\CheckersClass\orderCreate;
 use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     /**
@@ -58,62 +61,23 @@ class HomeController extends Controller
         ]);
     }
 
-    public function clientorder(Request $map)
+    public function clientorder(Request $request)
     {
-        // $itemid = $request->object1winlost;
-        // $rate = 
-        // checkRateTheSameClass::check($itemid,$rate);
-        //object1 指得是莊家 winlost指的是輸贏 其他以此類推
-        //object2 指得是閒家 
+        $gamestart = new gameStart;
+        $gameend = new gameEnd;
+        $request = json_decode($request->order,1);
         
-        //$request = json_decode($request);
-        print_r($map->all()) ;
-        exit();
-        // $object1winlostamount = $request->object1winlostamount;
-        // $object2winlostamount = $request->object2winlostamount;
-        // $object1bigsmallamount = $request->object1bigsmallamount;
-        // $object2bigsmallamount = $request->object2bigsmallamount;
-        // $object1singledobleamount = $request->object1singledobleamount;
-        // $object2singledobleamount = $request->object2singledobleamount;
-
-        // $error = null;
-        // $count = 0;
-        // //判斷客戶是否有下注 如果有就新增一張注單
-        // if ($object1winlostamount != null) {
-        //     $error = orderCreate::new($request->object1winlost, $object1winlostamount, 1);
-        //     $count++;
-        // }
-        // if ($object2winlostamount != null) {
-        //     $error =orderCreate::new($request->object2winlost, $object2winlostamount, 2);
-        //     $count++;
-        // }
-        // if ($object1bigsmallamount != null) {
-        //     $error =orderCreate::new($request->object1bigsmall, $object1bigsmallamount, 1);
-        //     $count++;
-        // }
-        // if ($object2bigsmallamount != null) {
-        //     $error =orderCreate::new($request->object2bigsmall, $object2bigsmallamount, 2);
-        //     $count++;
-        // }
-        // if ($object1singledobleamount != null) {
-        //     $error =orderCreate::new($request->object1singledoble, $object1singledobleamount, 1);
-        //     $count++;
-        // }
-        // if ($object2singledobleamount != null) {
-        //     $error =orderCreate::new($request->object2singledoble, $object2singledobleamount, 2);
-        //     $count++;
-        // }
-
-        // if ($error == null && $count != 0) {
-        //     $request->session()->flash('status', '下單成功！');
-        // } else {
-        //     if ($count == 0) {
-        //         $request->session()->flash('error', '沒有輸入金額');
-        //     } else {
-        //         $request->session()->flash('error', '下單失敗！');
-        //     }
-        // }
-
-        // return redirect('game');
+        foreach($request as $item){
+            $error = orderCreate::new($item);
+        }
+        if ($error == null ) {
+            
+            $result = $gamestart->start();
+            
+            $gameend->end($request,$result);
+            return $result;
+        } else {
+            return $error;
+        }
     }
 }
