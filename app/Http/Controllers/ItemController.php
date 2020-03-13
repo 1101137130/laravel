@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Item;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 
 class ItemController extends Controller
@@ -29,6 +30,7 @@ class ItemController extends Controller
         try {
             $item->delete();
             $request->session()->flash('status', '刪除成功！');
+            Redis::del($item->itemname);
             return redirect('item');
         } catch (Exception $e) {
             return $e;
@@ -48,6 +50,7 @@ class ItemController extends Controller
             'item' => $item
         ]);
     }
+    
     public function update(Request $request, Item $item)
     {
         $this->validate($request, [
@@ -57,6 +60,7 @@ class ItemController extends Controller
         try {
             $item->update();
             $request->session()->flash('status', '更改成功！');
+            Redis::set('isItemSetyet', false);  //修改redis資料
             return redirect('item');
         } catch (Exception $e) {
             return $e;
@@ -74,6 +78,7 @@ class ItemController extends Controller
         try {
             $item = Item::create($request->all());
             $request->session()->flash('status', '新增成功！');
+            Redis::set('isItemSetyet', false); //修改redis資料
             return redirect('item');
         } catch (Exception $e) {
             return $e;

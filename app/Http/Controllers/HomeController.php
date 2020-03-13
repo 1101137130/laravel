@@ -8,6 +8,9 @@ use App\CheckersClass\gameStart;
 use App\CheckersClass\gameEnd;
 use App\CheckersClass\orderCreate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
+use App\CheckersClass\setItemname;
+
 
 class HomeController extends Controller
 {
@@ -29,8 +32,8 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
-        if($user['manage_rate'] == 1){
+
+        if ($user['manage_rate'] == 1) {
             return view('home', [
                 'item' => true
             ]);
@@ -39,45 +42,50 @@ class HomeController extends Controller
             'item' => false
         ]);
     }
-
+   
     public function game()
     {
-        //傳送資料到頁面
-        $items = Item::all();
-        $win = $items->where('itemname', '贏')->first();
-        $lost = $items->where('itemname', '輸')->first();
-        $big = $items->where('itemname', '大')->first();
-        $small = $items->where('itemname', '小')->first();
-        $single = $items->where('itemname', '單')->first();
-        $doble = $items->where('itemname', '雙')->first();
+        if (!Redis::get('isItemSetyet')) {
+            $setitemname = new setItemname;
+            $setitemname->setItemname();
+        }
         return view('game', [
-            'win' => $win,
-            'lost' => $lost,
-            'big' => $big,
-            'small' => $small,
-            'single' => $single,
-            'doble' => $doble,
-            'items' => $items
+            'win' => json_decode(Redis::get('贏'), true),
+            'lost' => json_decode(Redis::get('輸'), true),
+            'big' => json_decode(Redis::get('大'), true),
+            'small' => json_decode(Redis::get('小'), true),
+            'single' => json_decode(Redis::get('單'), true),
+            'double' => json_decode(Redis::get('雙'), true),
+            'items' => json_decode(Redis::get('Item'), true),
         ]);
     }
 
     public function clientorder(Request $request)
     {
         $gamestart = new gameStart;
-        $gameend = new gameEnd;
-        $request = json_decode($request->order,1);
-        
-        foreach($request as $item){
-            $error = orderCreate::new($item);
-        }
-        if ($error == null ) {
-            
-            $result = $gamestart->start();
-            
-            $gameend->end($request,$result);
-            return $result;
+        //dd($request->order);
+        $request =$request->order;
+        // $re =json_decode($request->order);
+        // dd($re);
+        // dd($request);
+        // exit;
+       
+        if ($request != "true") {
+            foreach ($request as $item) {
+                $error = orderCreate::new($item);
+            }
+            if ($error == null) {
+                $gameend = new gameEnd;
+
+                $result = $gamestart->start();
+                $gameend->end($request, $result);
+                return $result;
+            } else {
+                return $error;
+            }
         } else {
-            return $error;
+            $result = $gamestart->start();
+            return $result;
         }
     }
 }

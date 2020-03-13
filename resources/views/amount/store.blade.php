@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-@if (session('status'))
-<div class="alert alert-success">
-    <strong>{{ session('status') }}
-</div>
-@endif
-<section class="conrainer">
+
+<div class="conrainer">
+    @if (session('status'))
+    <div class="alert alert-success">
+        <strong>{{ session('status') }}
+    </div>
+    @endif
     <form action="{{url('amount')}}" method="POST">
         {{csrf_field()}}
 
@@ -15,9 +16,15 @@
             <strong>{{$errors->first('itemname')}}</strong></br>
         </span>
         @endif
-        金額：<input type="text" placeholder="請輸入需要儲值金額" name="amount">
-        <input type="submit" value="儲存">
+
+        <div style="text-align: center;">
+            您有：{{$total}}</br>
+            金額：<input  style="text-align: center;" type="text" placeholder="請輸入需要儲值金額" name="amount">
+            <input class="btn btn-primary" type="submit" value="儲存">
+            <a role="btn" href="{{url('/')}}" class="btn btn-danger">回首頁</a>
+        </div>
+
     </form>
-</section>
+</div>
 
 @endsection

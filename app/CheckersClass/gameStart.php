@@ -2,10 +2,6 @@
 
 namespace App\CheckersClass;
 
-use Exception;
-use App\Amount;
-use App\AmountRecord;
-
 class gameStart
 {
 
@@ -22,6 +18,10 @@ class gameStart
             $result[] = $this->compare($object1[$i], $object2[$i]);
         }
 
+        $gameend = new gameEnd;
+        $finalresult = $gameend->getResult($result);
+        $array = array('finalresult' => $finalresult);
+        array_push($result, $array);
         return $result;
     }
 
@@ -56,6 +56,4 @@ class gameStart
             }
         }
     }
-
-   
 }

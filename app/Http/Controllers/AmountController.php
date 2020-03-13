@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Http\Request;
 use App\AmountRecord;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AmountController extends Controller
 {
@@ -20,7 +19,9 @@ class AmountController extends Controller
 
     public function amount()
     {
-        return view('amount.store');
+        $user = Auth::user();
+        $clientamount = Amount::where('user_id', $user->id)->first();
+        return view('amount.store',['total'=>$clientamount->amount]);
     }
 
     public function store(Request $request)

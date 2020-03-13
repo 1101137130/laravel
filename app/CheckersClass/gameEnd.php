@@ -3,6 +3,7 @@
 namespace App\CheckersClass;
 
 use App\CheckersClass\updateOrder;
+use App\CheckersClass\convertStatus;
 
 class gameEnd
 {
@@ -15,26 +16,44 @@ class gameEnd
     public function toClientBet($item, $result)
     {
         if ($item[0] == '贏') {
-            $this->win($item, $result);
+            $result = $this->getWin($result, $item[4]);
+            return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '輸') {
-            $this->lost($item, $result);
+            $result = $this->getWin($result);
+            return $this->alterDataNagtive($result, $item);
         }
         if ($item[0] == '大') {
-            $this->big($item, $result);
+            $result = $this->getBig($result, $item[4]);
+            return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '小') {
-            $this->small($item, $result);
+            $result = $this->getBig($result, $item[4]);
+            return $this->alterDataNagtive($result, $item);
         }
         if ($item[0] == '單') {
-            $this->single($item, $result);
+            $result = $this->getSingle($result, $item[4]);
+            return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '雙') {
-            $this->double($item, $result);
+            $result = $this->getSingle($result, $item[4]);
+            return $this->alterDataNagtive($result, $item);
         }
     }
 
-    public function winlost($result)
+    public function getResult($result) //取得總賽果
+    {
+        $result= $this->getWin($result);
+        if($result ==1){
+            return '莊家';
+        }
+        if($result ==2){
+            return '閒家';
+        }
+        return '平手';
+    }
+
+    public function getWin($result)
     {
         $ob1 = 0;
         $ob2 = 0;
@@ -54,88 +73,63 @@ class gameEnd
             return false;
         }
     }
-
-    public function bigsmall($result)
+    public function replaceObject($object)
     {
-        $ob1 = 0;
-        $ob2 = 0;
-        for ($i = 0; $i <= 2; $i++) {
-            $ob1 += $result[$i]['object1']['card'];
-            $ob2 += $result[$i]['object2']['card'];
+        if ($object == 1) {
+            $object = 'object1';
+        } else {
+            $object = 'object2';
         }
-        if ($ob1 > $ob2) {
+        return $object;
+    }
+
+    public function getBig($result, $object)
+    {
+        $ob = 0;
+        $object = $this->replaceObject($object);
+
+
+        for ($i = 0; $i <= 2; $i++) {
+            $ob += $result[$i][$object]['card'];
+        }
+        if ($ob > 9 && $ob != 9) {
             return 1;
-        } elseif ($ob1 < $ob2) {
-            return 2;
         } else {
             return false;
         }
     }
 
-    public function singledouble($result)
+    public function getSingle($result, $object)
     {
-        $ob1 = 0;
-        $ob2 = 0;
+        $object = $this->replaceObject($object);
+
+        $ob = 0;
         for ($i = 0; $i <= 2; $i++) {
-            $ob1 += $result[$i]['object1']['card'];
-            $ob2 += $result[$i]['object2']['card'];
+            $ob += $result[$i][$object]['card'];
         }
-        if ($ob1 % 2 == 1) {
+        if ($ob % 2 == 1) {
             return 1;
-        } elseif ($ob2 % 2 == 1) {
-            return 2;
         } else {
             return false;
         }
     }
-    public function win($item, $result)
-    {
-        $result = $this->winlost($result);
-        return $this->alterDataPositive($result,$item);
 
-    }
-
-    public function lost($item, $result)
-    {
-        $result = $this->winlost($result);
-        return $this->alterDataNagtive($result,$item);
-    }
-
-    public function big($item, $result)
-    {
-        $result = $this->bigsmall($result);
-        return $this->alterDataPositive($result,$item);
-
-    }
-
-    public function small($item, $result)
-    {
-        $result = $this->bigsmall($result);
-        return $this->alterDataNagtive($result,$item);
-    }
-
-    public function single($item, $result)
-    {
-        $result = $this->singledouble($result);
-        return $this->alterDataPositive($result,$item);
-    }
-    public function double($item, $result)
-    {
-        $result = $this->singledouble($result);
-        return $this->alterDataNagtive($result,$item);
-    }
-    public function alterDataPositive($result,$item)
+    public function alterDataPositive($result, $item)
     {
         $updatorder = new updateOrder;
+        $status = new convertStatus;
+        if ($result == $item[4]) {
 
-        if ($result == $item[4] ) {
-            $error = $updatorder->update($item, 2); //更改訂單狀態 為贏
+            $win = $status->convertWinLostStatus('win');
+            $error = $updatorder->update($item, $win); //更改訂單狀態 為贏
             if ($error) {
                 return $error;
             }
             return '贏';
         } else {
-            $error = $updatorder->update($item, 3); //更改訂單狀態 為輸
+            $lost = $status->convertWinLostStatus('lost');
+
+            $error = $updatorder->update($item, $lost); //更改訂單狀態 為輸
             if ($error) {
                 return $error;
             }
@@ -143,18 +137,21 @@ class gameEnd
         }
     }
 
-    public function alterDataNagtive($result,$item)
+    public function alterDataNagtive($result, $item)
     {
         $updatorder = new updateOrder;
+        $status = new convertStatus;
 
         if ($result != $item[4] && $result != false) {
-            $error = $updatorder->update($item, 2); //更改訂單狀態 為贏
+            $win = $status->convertWinLostStatus('win');
+            $error = $updatorder->update($item, $win); //更改訂單狀態 為贏
             if ($error) {
                 return $error;
             }
             return '贏';
         } else {
-            $error = $updatorder->update($item, 3); //更改訂單狀態 為輸
+            $lost = $status->convertWinLostStatus('lost');
+            $error = $updatorder->update($item, $lost); //更改訂單狀態 為輸
             if ($error) {
                 return $error;
             }
