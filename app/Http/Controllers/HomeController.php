@@ -34,57 +34,65 @@ class HomeController extends Controller
         $user = Auth::user();
 
         if ($user['manage_rate'] == 1) {
+
             return view('home', [
                 'item' => true
             ]);
         }
+
         return view('home', [
             'item' => false
         ]);
     }
-   
+
     public function game()
+    {
+
+        return view('game');
+    }
+
+    public function data()
     {
         if (!Redis::get('isItemSetyet')) {
             $setitemname = new setItemname;
             $setitemname->setItemname();
         }
-        return view('game', [
-            'win' => json_decode(Redis::get('贏'), true),
-            'lost' => json_decode(Redis::get('輸'), true),
-            'big' => json_decode(Redis::get('大'), true),
-            'small' => json_decode(Redis::get('小'), true),
-            'single' => json_decode(Redis::get('單'), true),
-            'double' => json_decode(Redis::get('雙'), true),
-            'items' => json_decode(Redis::get('Item'), true),
-        ]);
+        $data = Redis::get('Item');
+        $array = json_decode($data, true);
+        $data = array();
+        for ($i = 0; $i < sizeof($array); $i++) {
+            array_push($data, array($array[$i]['id'], $array[$i]['itemname'], $array[$i]['rate']));
+        }
+        return $data;
     }
 
     public function clientorder(Request $request)
     {
         $gamestart = new gameStart;
-        //dd($request->order);
-        $request =$request->order;
-        // $re =json_decode($request->order);
-        // dd($re);
-        // dd($request);
-        // exit;
-       
-        if ($request != "true") {
-            foreach ($request as $item) {
-                $error = orderCreate::new($item);
-            }
-            if ($error == null) {
-                $gameend = new gameEnd;
+        $ordercreate = new orderCreate;
 
-                $result = $gamestart->start();
-                $gameend->end($request, $result);
-                return $result;
-            } else {
-                return $error;
+        $order = $request->order;
+
+
+        if ($order != "true") {
+            foreach ($order as $item) {
+                $data = $ordercreate->new($item);
+
+                if ($data[0] != true) {
+                    $request->session()->flash('error', $data[1]);
+
+                    return $data[1];
+                }
             }
+            $gameend = new gameEnd;
+
+            $result = $gamestart->start();
+            $gameend->end($order, $result);
+
+            return $result;
         } else {
             $result = $gamestart->start();
+
             return $result;
         }
     }

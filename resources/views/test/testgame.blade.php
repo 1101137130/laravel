@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <table class="table table-hover">
@@ -55,6 +56,8 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object1winlost">
+                            <option value="{{$win['itemname'].' '.$win['id'].' '.$win['rate']}}" selected="selected">{{$win['itemname'].' : '.$win['rate']}}</option>
+                            <option value="{{$lost['itemname'].' '.$lost['id'].' '.$lost['rate']}}">{{$lost['itemname'].' : '.$lost['rate']}}</option>
                         </select>
 
                         <input id="object1winlostamount" class="form-control" type="number" onchange="dataToNap('object1winlost',this.id,1)" placeholder="請輸入金額" step="5" min="0">
@@ -63,6 +66,8 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object2winlost">
+                            <option value="{{$win['itemname'].' '.$win['id'].' '.$win['rate']}}" selected="selected">{{$win['itemname'].' : '.$win['rate']}}</option>
+                            <option value="{{$lost['itemname'].' '.$lost['id'].' '.$lost['rate']}}">{{$lost['itemname'].' : '.$lost['rate']}}</option>
                         </select>
 
                         <input type="number" class="form-control" id="object2winlostamount" onchange="dataToNap('object2winlost',this.id,2)" placeholder="請輸入金額" step="5" min="0">
@@ -74,6 +79,8 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object1bigsmall">
+                            <option value="{{$big['itemname'].' '.$big['id'].' '.$big['rate']}}" selected="selected">{{$big['itemname'].' : '.$big['rate']}}</option>
+                            <option value="{{$small['itemname'].' '.$small['id'].' '.$small['rate']}}">{{$small['itemname'].' : '.$small['rate']}}</option>
                         </select>
 
                         <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
@@ -82,6 +89,8 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object2bigsmall">
+                            <option value="{{$big['itemname'].' '.$big['id'].' '.$big['rate']}}" selected="selected">{{$big['itemname'].' : '.$big['rate']}}</option>
+                            <option value="{{$small['itemname'].' '.$small['id'].' '.$small['rate']}}">{{$small['itemname'].' : '.$small['rate']}}</option>
                         </select>
 
                         <input type="number" class="form-control" id="object2bigsmallamount" onchange="dataToNap('object2bigsmall',this.id,2)" placeholder="請輸入金額" step="5" min="0">
@@ -93,6 +102,8 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object1singledouble">
+                            <option value="{{$single['itemname'].' '.$single['id'].' '.$single['rate']}}" selected="selected">{{$single['itemname'].' : '.$single['rate']}}</option>
+                            <option value="{{$double['itemname'].' '.$double['id'].' '.$double['rate']}}">{{$double['itemname'].' : '.$double['rate']}}</option>
                         </select>
 
                         <input type="number" class="form-control" id="object1singledoubleamount" onchange="dataToNap('object1singledouble',this.id,1)" placeholder="請輸入金額" step="5" min="0">
@@ -101,77 +112,65 @@
                     <td style="text-align: center;">
 
                         <select class="form-control" id="object2singledouble">
+                            <option value="{{$single['itemname'].' '.$single['id'].' '.$single['rate']}}" selected="selected">{{$single['itemname'].' : '.$single['rate']}}</option>
+                            <option value="{{$double['itemname'].' '.$double['id'].' '.$double['rate']}}">{{$double['itemname'].' : '.$double['rate']}}</option>
                         </select>
 
                         <input type="number" class="form-control" id="object2singledoubleamount" onchange="dataToNap('object2singledouble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                 </tr>
+
+                <!-- <tr hidden="hidden" >
+                    <td style="text-align: center;">
+
+                        <selectclass="form-control" >
+                            <option selected="selected">{{$win['itemname'].' : '.$win['rate']}}</option>
+                            <option>{{$lost['itemname'].' : '.$win['rate']}}</option>
+                        </select>
+
+                        <input type="number" class="form-control" name="bet_object:1" step="5" min="0">
+
+                    </td>
+                    <td style="text-align: center;">
+
+                        <select class="form-control">
+                            <option selected="selected">{{$win['itemname'].' : '.$win['rate']}}</option>
+                            <option>{{$lost['itemname'].' : '.$win['rate']}}</option>
+                        </select>
+
+                        <input type="number" class="form-control" name="bet_object:2" step="5" min="0">
+
+                    </td>
+                </tr> -->
             </tbody>
         </table>
         <div style="text-align: center;">
             <a role="btn" class="btn btn-primary" onclick="action()"> 下單/開始</a>
-            <a class="btn btn-danger" href="{{url('show')}}" role="btn">清空</a>
+            <a class="btn btn-danger" href="{{url('game')}}" role="btn">清空</a>
         </div>
     </form>
-    
+    <div style="text-align: center;">
+        <table>
+            @foreach ($items as $item)
+            <tr>
+                <td>
+                    注項名稱：{{$item['itemname'].':'}} >
+                </td>
+                <td>
+                    賠率為：{{'rate :'.$item['rate']}}
+                </td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 </div>
 @endsection
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
 </script>
 
+
 <script>
-    window.onload = show;
-    
-    function show() {
-        $.ajax({
-            type: "POST",
-            url: "{{url('show')}}",
-            dataType: "json",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(data) {
-               
-                // items =JSON.parse(data[0])
-                //  $('#ob1lost').html(data[1]['object1']['card']);
-                   var object1winlost = document.getElementById('object1winlost')
-                   var object2winlost = document.getElementById('object2winlost')
-                   var object1bigsmall = document.getElementById('object1bigsmall')
-                   var object2bigsmall = document.getElementById('object2bigsmall')
-                   var object1singledouble = document.getElementById('object1singledouble')
-                   var object2singledouble = document.getElementById('object2singledouble')
-
-                   object1winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
-                   object1winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
-                   object2winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
-                   object2winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
-
-                   object1bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
-                   object1bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
-                   object2bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
-                   object2bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
-
-                   object1singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
-                   object1singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
-                   object2singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
-                   object2singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
-                // $('#ob1three').html(data[2]['object1']['card']);
-                // $('#ob2one').html(data[0]['object2']['card']);
-                // $('#ob2two').html(data[1]['object2']['card']);
-                // $('#ob2three').html(data[2]['object2']['card']);
-                // $('#win1').html(data[0][0]['result']);
-                // $('#win2').html(data[1][0]['result']);
-                // $('#win3').html(data[2][0]['result']);
-                // $('#finalresult').html(data[3]['finalresult']);
-                console.log(data)
-            },
-            error: function(jqXHR) {
-                console.log('error')
-            }
-        })
-    }
     const order = new Map(); //建立一個外部map來存放使用者選擇的資料
 
     function alertcontents() { //建立確認訊息來提供使用者作確認是否下注用
@@ -211,6 +210,7 @@
     }
 
     function ajaxBack(ordersarray) {
+
         $.ajax({
             type: "POST",
             url: "{{url('game')}}",
@@ -232,10 +232,9 @@
                 $('#win2').html(data[1][0]['result']);
                 $('#win3').html(data[2][0]['result']);
                 $('#finalresult').html(data[3]['finalresult']);
-                
+                //   console.log(data)
             },
             error: function(jqXHR) {
-                //location.reload()
                 console.log(jqXHR)
             }
         })
@@ -245,7 +244,6 @@
         ordersarray = mapToString();
         if (ordersarray.length > 0) {
             var array = alertcontents();
-        console.log(ordersarray)
             
             var yes = confirm(array + '\n' + '你確定嗎？')
             if (yes) {
@@ -263,26 +261,23 @@
 
     function dataToNap(id, amountid, object) {
         var item = document.getElementById(id).value
-        
-        var item = item.split(",");
-        var amount = document.getElementById(amountid).value
+        var item = item.split(" ");
 
+        var amount = document.getElementById(amountid).value
         //金額不為0則新增一個map 並放入 外部map-order
         //金額為0則判斷外部map有無此id 有則做刪除
         if (amount != 0) {
             const ord = new Map();
-            ord.set('itemname', item[1])
-            ord.set('itemid', item[0])
+            ord.set('itemname', item[0])
+            ord.set('itemid', item[1])
             ord.set('rate', item[2])
             ord.set('amount', amount)
             ord.set('object', object)
             order.set(id, ord)
-            console.log(order)
         } else {
             if (order.has(id)) {
                 order.delete(id)
             }
         }
     }
-    
 </script>

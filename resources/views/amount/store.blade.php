@@ -19,7 +19,7 @@
 
         <div style="text-align: center;">
             您有：{{$total}}</br>
-            金額：<input  style="text-align: center;" type="text" placeholder="請輸入需要儲值金額" name="amount">
+            金額：<input  style="text-align: center;" type="number" min="0" placeholder="請輸入需要儲值金額" name="amount">
             <input class="btn btn-primary" type="submit" value="儲存">
             <a role="btn" href="{{url('/')}}" class="btn btn-danger">回首頁</a>
         </div>

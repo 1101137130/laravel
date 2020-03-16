@@ -5,12 +5,14 @@ namespace App\CheckersClass;
 use App\Order;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-
+use App\CheckersClass\convertWinLostStatus;
 
 class updateOrder
 {
     public function update($item, $status)
     {
+        $convertstatuse = new convertStatus;
+        $status = $convertstatuse->convertWinLostStatus($status);
         $user = Auth::user();
         $order = new Order;
         try {

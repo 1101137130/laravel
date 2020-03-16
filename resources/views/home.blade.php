@@ -74,7 +74,7 @@
 
                 <div class="panel-body">
                     <div class="links">
-                        <a href="{{url('game')}}">Play</a>
+                        <a href="{{url('show')}}">Play</a>
                         @if ($item == true)
                         <a href="{{ url('/item') }}">Item</a>
                         @endif

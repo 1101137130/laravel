@@ -17,37 +17,45 @@ class gameEnd
     {
         if ($item[0] == '贏') {
             $result = $this->getWin($result, $item[4]);
+
             return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '輸') {
             $result = $this->getWin($result);
+
             return $this->alterDataNagtive($result, $item);
         }
         if ($item[0] == '大') {
             $result = $this->getBig($result, $item[4]);
+
             return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '小') {
             $result = $this->getBig($result, $item[4]);
+
             return $this->alterDataNagtive($result, $item);
         }
         if ($item[0] == '單') {
             $result = $this->getSingle($result, $item[4]);
+
             return $this->alterDataPositive($result, $item);
         }
         if ($item[0] == '雙') {
             $result = $this->getSingle($result, $item[4]);
+
             return $this->alterDataNagtive($result, $item);
         }
     }
 
     public function getResult($result) //取得總賽果
     {
-        $result= $this->getWin($result);
-        if($result ==1){
+        $result = $this->getWin($result);
+        if ($result == 1) {
+
             return '莊家';
         }
-        if($result ==2){
+        if ($result == 2) {
+
             return '閒家';
         }
         return '平手';
@@ -58,21 +66,25 @@ class gameEnd
         $ob1 = 0;
         $ob2 = 0;
         for ($i = 0; $i <= 2; $i++) {
-            if ($result[$i][0]['result'] == '莊家') {
+            if ($result[$i][2]['result'] == '莊家') {
                 $ob1++;
             }
-            if ($result[$i][0]['result'] == '閒家') {
+            if ($result[$i][2]['result'] == '閒家') {
                 $ob2++;
             }
         }
         if ($ob1 >= 2) {
+
             return 1;
         } elseif ($ob2 >= 2) {
+
             return 2;
         } else {
-            return false;
+
+            return 0;
         }
     }
+    
     public function replaceObject($object)
     {
         if ($object == 1) {
@@ -80,6 +92,7 @@ class gameEnd
         } else {
             $object = 'object2';
         }
+
         return $object;
     }
 
@@ -93,8 +106,10 @@ class gameEnd
             $ob += $result[$i][$object]['card'];
         }
         if ($ob > 9 && $ob != 9) {
+
             return 1;
         } else {
+
             return false;
         }
     }
@@ -108,8 +123,10 @@ class gameEnd
             $ob += $result[$i][$object]['card'];
         }
         if ($ob % 2 == 1) {
+
             return 1;
         } else {
+
             return false;
         }
     }
@@ -123,6 +140,7 @@ class gameEnd
             $win = $status->convertWinLostStatus('win');
             $error = $updatorder->update($item, $win); //更改訂單狀態 為贏
             if ($error) {
+
                 return $error;
             }
             return '贏';
@@ -131,8 +149,10 @@ class gameEnd
 
             $error = $updatorder->update($item, $lost); //更改訂單狀態 為輸
             if ($error) {
+
                 return $error;
             }
+
             return '輸';
         }
     }
@@ -146,6 +166,7 @@ class gameEnd
             $win = $status->convertWinLostStatus('win');
             $error = $updatorder->update($item, $win); //更改訂單狀態 為贏
             if ($error) {
+
                 return $error;
             }
             return '贏';
@@ -155,6 +176,7 @@ class gameEnd
             if ($error) {
                 return $error;
             }
+
             return '輸';
         }
     }

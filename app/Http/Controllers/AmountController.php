@@ -19,9 +19,15 @@ class AmountController extends Controller
 
     public function amount()
     {
+
         $user = Auth::user();
         $clientamount = Amount::where('user_id', $user->id)->first();
-        return view('amount.store',['total'=>$clientamount->amount]);
+        if ($clientamount == null) {
+
+            return view('amount.store', ['total' => 0]);
+        }
+
+        return view('amount.store', ['total' => $clientamount->amount]);
     }
 
     public function store(Request $request)
@@ -43,9 +49,10 @@ class AmountController extends Controller
                 $clientamount->update(['amount' => $totalamount]);
 
                 $request->session()->flash('status', '儲值成功！');
-                return redirect('game');
+                return redirect('show');
             } catch (Exception $e) {
                 echo $e;
+
                 return view('amount.store');
             }
         } else {                            //如果是 則建立新的amount 並預設金額為0 然後在新增金額紀錄 
@@ -57,9 +64,10 @@ class AmountController extends Controller
                     'status' => 4           //status:4代表以儲值方式加錢
                 ]);
                 $request->session()->flash('status', '儲值成功！');
-                return redirect('game');
+                return redirect('show');
             } catch (Exception $e) {
                 echo $e;
+
                 return view('amount.store');
             }
         }
