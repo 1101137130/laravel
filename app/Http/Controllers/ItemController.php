@@ -50,7 +50,7 @@ class ItemController extends Controller
             'item' => $item
         ]);
     }
-    
+
     public function update(Request $request, Item $item)
     {
         $this->validate($request, [
@@ -58,7 +58,7 @@ class ItemController extends Controller
             'rate' => 'required',
         ]);
         try {
-            $item->update();
+            $item->update(['itemname' => $request->itemname, 'rate' => $request->rate]);
             $request->session()->flash('status', '更改成功！');
             Redis::set('isItemSetyet', false);  //修改redis資料
             return redirect('item');
@@ -66,10 +66,8 @@ class ItemController extends Controller
             return $e;
         }
     }
-
-    public function store(Request $request)
+    public function create(Request $request)
     {
-
         $this->validate($request, [
             'itemname' => 'required|max:15',
             'rate' => 'required',
@@ -81,9 +79,22 @@ class ItemController extends Controller
             Redis::set('isItemSetyet', false); //修改redis資料
             return redirect('item');
         } catch (Exception $e) {
-            return $e;
+
+            throw $e;
         }
 
         return $item;
+    }
+    public function store()
+    {
+        $items = Item::all();
+        $restult = array();
+        $i = 0;
+        foreach ($items as $item) {
+            $restult[$i] = array($item->id, $item->itemname, $item->rate);
+            $i++;
+        }
+        
+        return $restult;
     }
 }

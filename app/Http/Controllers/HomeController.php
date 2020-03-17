@@ -87,7 +87,9 @@ class HomeController extends Controller
             $gameend = new gameEnd;
 
             $result = $gamestart->start();
-            $gameend->end($order, $result);
+            
+
+            array_push($result, $gameend->end($order, $result));
 
             return $result;
         } else {

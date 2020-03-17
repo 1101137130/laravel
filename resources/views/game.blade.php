@@ -114,7 +114,7 @@
             <a class="btn btn-danger" href="{{url('show')}}" role="btn">清空</a>
         </div>
     </form>
-    
+
 </div>
 @endsection
 
@@ -123,7 +123,7 @@
 
 <script>
     window.onload = show;
-    
+
     function show() {
         $.ajax({
             type: "POST",
@@ -133,39 +133,31 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
-               
+
                 // items =JSON.parse(data[0])
                 //  $('#ob1lost').html(data[1]['object1']['card']);
-                   var object1winlost = document.getElementById('object1winlost')
-                   var object2winlost = document.getElementById('object2winlost')
-                   var object1bigsmall = document.getElementById('object1bigsmall')
-                   var object2bigsmall = document.getElementById('object2bigsmall')
-                   var object1singledouble = document.getElementById('object1singledouble')
-                   var object2singledouble = document.getElementById('object2singledouble')
+                var object1winlost = document.getElementById('object1winlost')
+                var object2winlost = document.getElementById('object2winlost')
+                var object1bigsmall = document.getElementById('object1bigsmall')
+                var object2bigsmall = document.getElementById('object2bigsmall')
+                var object1singledouble = document.getElementById('object1singledouble')
+                var object2singledouble = document.getElementById('object2singledouble')
 
-                   object1winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
-                   object1winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
-                   object2winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
-                   object2winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
+                object1winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
+                object1winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
+                object2winlost.options.add(new Option(data[0][1] + '：' + data[0][2], data[0]))
+                object2winlost.options.add(new Option(data[1][1] + '：' + data[1][2], data[1]))
 
-                   object1bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
-                   object1bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
-                   object2bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
-                   object2bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
+                object1bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
+                object1bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
+                object2bigsmall.options.add(new Option(data[2][1] + '：' + data[2][2], data[2]))
+                object2bigsmall.options.add(new Option(data[3][1] + '：' + data[3][2], data[3]))
 
-                   object1singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
-                   object1singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
-                   object2singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
-                   object2singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
-                // $('#ob1three').html(data[2]['object1']['card']);
-                // $('#ob2one').html(data[0]['object2']['card']);
-                // $('#ob2two').html(data[1]['object2']['card']);
-                // $('#ob2three').html(data[2]['object2']['card']);
-                // $('#win1').html(data[0][0]['result']);
-                // $('#win2').html(data[1][0]['result']);
-                // $('#win3').html(data[2][0]['result']);
-                // $('#finalresult').html(data[3]['finalresult']);
-                console.log(data)
+                object1singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
+                object1singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
+                object2singledouble.options.add(new Option(data[4][1] + '：' + data[4][2], data[4]))
+                object2singledouble.options.add(new Option(data[5][1] + '：' + data[5][2], data[5]))
+
             },
             error: function(jqXHR) {
                 console.log('error')
@@ -178,8 +170,8 @@
         var array = new Array();
 
         for (var i = 0; i < ordersarray.length; i++) {
-            array.push('\n'+'項目：' + convertObjectToName(ordersarray[i][4]) + ordersarray[i][0] + ' | ' +
-                '賠率為：' + ordersarray[i][2] )
+            array.push('\n' + '項目：' + convertObjectToName(ordersarray[i][4]) + ordersarray[i][0] + ' | ' +
+                '賠率為：' + ordersarray[i][2])
         }
         return array;
     }
@@ -222,17 +214,27 @@
                 order: ordersarray
             },
             success: function(data) {
-                $('#ob1one').html(data[0]['object1']['card']);
-                $('#ob1two').html(data[1]['object1']['card']);
-                $('#ob1three').html(data[2]['object1']['card']);
-                $('#ob2one').html(data[0]['object2']['card']);
-                $('#ob2two').html(data[1]['object2']['card']);
-                $('#ob2three').html(data[2]['object2']['card']);
-                $('#win1').html(data[0][0]['result']);
-                $('#win2').html(data[1][0]['result']);
-                $('#win3').html(data[2][0]['result']);
-                $('#finalresult').html(data[3]['finalresult']);
-                
+                $('#ob1one').html(data[0][0]);
+                $('#ob1two').html(data[1][0]);
+                $('#ob1three').html(data[2][0]);
+                $('#ob2one').html(data[0][1]);
+                $('#ob2two').html(data[1][1]);
+                $('#ob2three').html(data[2][1]);
+                $('#win1').html(data[0][2]);
+                $('#win2').html(data[1][2]);
+                $('#win3').html(data[2][2]);
+                $('#finalresult').html(toChinese(data[3]));
+                var array = new Array;
+                if (data[4] != null) {
+                    for (var i = 0; i < data[4].length; i++) {
+                        array[i] = new Array;
+                        array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
+
+                    }
+                    alert(array)
+                }
+
+
             },
             error: function(jqXHR) {
                 //location.reload()
@@ -241,12 +243,32 @@
         })
     }
 
+    function toWinLost($object) {
+        if ($object == 1) {
+            return '贏';
+        }
+        if ($object == 0) {
+            return '輸';
+        }
+    }
+
+    function toChinese($object) {
+        if ($object == 1) {
+            return '莊家';
+        }
+        if ($object == 2) {
+            return '閒家';
+        }
+        if ($object == 3) {
+            return '平手';
+        }
+    }
+
     function action() {
         ordersarray = mapToString();
         if (ordersarray.length > 0) {
             var array = alertcontents();
-        console.log(ordersarray)
-            
+
             var yes = confirm(array + '\n' + '你確定嗎？')
             if (yes) {
                 ajaxBack(ordersarray);
@@ -263,7 +285,7 @@
 
     function dataToNap(id, amountid, object) {
         var item = document.getElementById(id).value
-        
+
         var item = item.split(",");
         var amount = document.getElementById(amountid).value
 
@@ -277,12 +299,10 @@
             ord.set('amount', amount)
             ord.set('object', object)
             order.set(id, ord)
-            console.log(order)
         } else {
             if (order.has(id)) {
                 order.delete(id)
             }
         }
     }
-    
 </script>

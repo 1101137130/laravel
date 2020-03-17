@@ -23,9 +23,13 @@ class updateOrder
                 ->orderBy('created_at', 'desc')
                 ->first()
                 ->update(['status' => $status]);
+
+            return array(true, '');
         } catch (Exception $e) {
 
-            return $e;
+            $array = array(false, $e);
+
+            return $array;
         }
     }
 }
