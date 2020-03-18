@@ -145,8 +145,8 @@
         var inputnameid = itemnameid.attributes[1].nodeValue;
         var rateid = itemidid.attributes[1].nodeValue;
 
-        $(tdnameid).append('項目：<input name="itemname" onchange="changeDatatemp(' + inputnameid + ',' + rateid + ',' + itemid + ')" type="text" placeholder=' + itemnamevalue + ' value=' + itemnamevalue + ' id=' + inputnameid + ' >');
-        $(tdidid).append('賠率：<input  name="itemrate" onchange="changeDatatemp(' + inputnameid + ',' + rateid + ',' + itemid + ')" type="number" step="0.0001" min="0.000" max="10000" placeholder=' + ratevalue + ' value=' + ratevalue + ' id=' + rateid + '>');
+        $(tdnameid).append('項目：<input required="required" name="itemname" onchange="changeDatatemp(' + inputnameid + ',' + rateid + ',' + itemid + ')" type="text" placeholder=' + itemnamevalue + ' value=' + itemnamevalue + ' id=' + inputnameid + ' >');
+        $(tdidid).append('賠率：<input required="required"  name="itemrate" onchange="changeDatatemp(' + inputnameid + ',' + rateid + ',' + itemid + ')" type="number" step="0.0001" min="0.000" max="10000" placeholder=' + ratevalue + ' value=' + ratevalue + ' id=' + rateid + '>');
 
         store(i, itemid, inputnameid, rateid)
     }
