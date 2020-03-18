@@ -19,6 +19,7 @@ $q=Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('item', 'ItemController');
+Route::post('item/edit', 'ItemController@edit');
 Route::resource('order', 'OrderController');
 Route::get('/show', 'HomeController@game')->name('game');
 Route::post('/show', 'HomeController@data')->name('game');
