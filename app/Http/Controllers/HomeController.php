@@ -48,7 +48,7 @@ class HomeController extends Controller
     public function game()
     {
 
-        return view('game');
+        return view('test.game');
     }
 
     public function data()
@@ -63,6 +63,7 @@ class HomeController extends Controller
         for ($i = 0; $i < sizeof($array); $i++) {
             array_push($data, array($array[$i]['id'], $array[$i]['itemname'], $array[$i]['rate']));
         }
+
         return $data;
     }
 

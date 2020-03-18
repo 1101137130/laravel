@@ -76,7 +76,8 @@
                         <select class="form-control" id="object1bigsmall">
                         </select>
 
-                        <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                        <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)"  placeholder="請輸入金額" step="5" min="0">
+                        
                     </td>
 
                     <td style="text-align: center;">
@@ -304,5 +305,14 @@
                 order.delete(id)
             }
         }
+    }
+
+    function winAmount(amount, id) {
+        var bet = $(id).val();
+        var win = amount * bet;
+    }
+
+    function compute(amount, rate) {
+        return amount * rate;
     }
 </script>
