@@ -10,7 +10,6 @@ class checkUpdateUserAmount
 {
     public function check($user, $amount)
     {
-
         $amountmodel = Amount::where('user_id', $user->id)->first();
 
         if ($amountmodel == null) {
@@ -31,11 +30,9 @@ class checkUpdateUserAmount
 
     public function update($user, $amount)
     {
-        //$updateamount = $user->amount - $amount;
         $amount = $amount * -1;
         try {
             Amountrecord::create(['user_id' => $user->id, 'amount' => $amount, 'status' => 1]);
-            //$user->update(['amount' => $updateamount]);
             $data = array(true, '');
 
             return  $data;
@@ -60,10 +57,6 @@ class checkUpdateUserAmount
                     'status' => 4           //status:4代表以儲值方式加錢
                 ]);
 
-                // //修改客戶總金額
-                // $totalamount = $clientamount->amount + $request->amount;
-                // $clientamount->update(['amount' => $totalamount]);
-
                 $request->session()->flash('status', '儲值成功！');
 
                 return redirect('game');
@@ -81,8 +74,8 @@ class checkUpdateUserAmount
                 ]);
                 //建立新的金額紀錄 
                 Amount::create(['user_id' => $user->id, 'amount' => $request->amount]);
-
                 $request->session()->flash('status', '儲值成功！');
+
                 return redirect('game');
             } catch (Exception $e) {
                 echo $e;

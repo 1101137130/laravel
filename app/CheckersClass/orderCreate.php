@@ -12,16 +12,18 @@ class orderCreate
 {
     public function new($item) //order處理
     {
-        $check = new checkUpdateUserAmount;
+        $checkandUpadate = new checkUpdateUserAmount;
         //item[0]-> itemname; item[1]->itemid  
         //item[2]-> rate ; item[3] -> amount 
         //item[4]-> ocject 1:莊家 2:閒家
 
         $user = Auth::user();
-        $data = $check->check($user, $item[3]);
+        $data = $checkandUpadate->check($user, $item[3]);
 
         if ($data[0] == true) {
+             
             $checkrate = checkRateTheSame::check($item[1], $item[2]);
+            
             if ($checkrate == false) {
                 $error = '賠率已變動請重新下單！';
                 $data = array(false, $error);

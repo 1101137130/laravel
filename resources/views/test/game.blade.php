@@ -56,9 +56,9 @@
 
                         <select class="form-control" id="object1winlost">
                         </select>
-                       
-                        <input  data-toggle="tooltip" data-placement="bottom" id="object1winlostamount" class="form-control" type="number" onchange="dataToNap('object1winlost',this.id,1)" onmouseover="compute(this.id, this.value, 'object1winlost')" placeholder="請輸入金額" step="5" min="0">
-                        
+
+                        <input data-toggle="tooltip" data-placement="bottom" id="object1winlostamount" class="form-control" type="number" onchange="dataToNap('object1winlost',this.id,1)" onmouseover="compute(this.id, this.value, 'object1winlost')" placeholder="請輸入金額" step="5" min="0">
+
                     </td>
                     <td style="text-align: center;">
 
@@ -103,7 +103,7 @@
                         <select class="form-control" id="object2singledouble">
                         </select>
 
-                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object2singledouble')"  type="number" class="form-control" id="object2singledoubleamount" onchange="dataToNap('object2singledouble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object2singledouble')" type="number" class="form-control" id="object2singledoubleamount" onchange="dataToNap('object2singledouble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                 </tr>
@@ -166,11 +166,14 @@
 
     function alertcontents() { //建立確認訊息來提供使用者作確認是否下注用
         var array = new Array();
-
+        var posibleWinAmount = 0;
         for (var i = 0; i < ordersarray.length; i++) {
             array.push('\n' + '項目：' + convertObjectToName(ordersarray[i][4]) + ordersarray[i][0] + ' | ' +
-                '賠率為：' + ordersarray[i][2])
+                '賠率為：' + ordersarray[i][2] + ' | ' + '金額：' + ordersarray[i][3])
+            posibleWinAmount += ordersarray[i][3] * ordersarray[i][2];
         }
+
+        array.push('\n' + '預估獲利：' + posibleWinAmount)
         return array;
     }
 
@@ -212,29 +215,34 @@
                 order: ordersarray
             },
             success: function(data) {
-                $('#ob1one').html(data[0][0]);
-                $('#ob1two').html(data[1][0]);
-                $('#ob1three').html(data[2][0]);
-                $('#ob2one').html(data[0][1]);
-                $('#ob2two').html(data[1][1]);
-                $('#ob2three').html(data[2][1]);
-                $('#win1').html(data[0][2]);
-                $('#win2').html(data[1][2]);
-                $('#win3').html(data[2][2]);
-                $('#finalresult').html(toChinese(data[3]));
-                var array = new Array;
-                if (data[4] != null) {
-                    for (var i = 0; i < data[4].length; i++) {
-                        array[i] = new Array;
-                        array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
+                console.log(data)
+                if (typeof data == typeof 'string') {
+                    location.reload();
+                } else {
+                    $('#ob1one').html(data[0][0]);
+                    $('#ob1two').html(data[1][0]);
+                    $('#ob1three').html(data[2][0]);
+                    $('#ob2one').html(data[0][1]);
+                    $('#ob2two').html(data[1][1]);
+                    $('#ob2three').html(data[2][1]);
+                    $('#win1').html(data[0][2]);
+                    $('#win2').html(data[1][2]);
+                    $('#win3').html(data[2][2]);
+                    $('#finalresult').html(toChinese(data[3]));
+                    $('#winamount').html(data[5]);
+                    getAmount();
+                    var array = new Array;
+                    if (data[4] != null) {
+                        for (var i = 0; i < data[4].length; i++) {
+                            array[i] = new Array;
+                            array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
+                        }
+
+                        alert(array)
                     }
-                    alert(array)
                 }
-
-
             },
             error: function(jqXHR) {
-                //location.reload()
                 console.log(jqXHR)
             }
         })
@@ -302,17 +310,14 @@
             }
         }
     }
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
 
     function compute(id, amount, rateid) {
-
         var rateid = '#' + rateid;
         var id = '#' + id
         rate = $(rateid).val()
-        var arry = rate.split(',')
-        console.log(amount)
-        $(id).attr('title','預估可贏 ：' + amount * arry[2]);
+        if (rate != null) {
+            var arry = rate.split(',')
+            $(id).attr('title', '預估可贏 ：' + amount * arry[2]);
+        }
     }
 </script>

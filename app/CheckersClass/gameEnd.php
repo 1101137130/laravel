@@ -9,15 +9,11 @@ class gameEnd
 {
     public function end($request, $result)
     {
-       
         $i = 0;
         foreach ($request as $item) {
-
-        
             $clientresult = $this->toClientBet($item, $result);
             array_push($request[$i], $clientresult);
             $i++;
-            
         }
 
         return $request;
@@ -36,7 +32,6 @@ class gameEnd
 
                 return 0;
             }
-
             
         }
         if ($item[0] == '輸') {
@@ -58,8 +53,8 @@ class gameEnd
             return $result;
         }
         if ($item[0] == '小') {
-            $result = !$this->getBig($result, $item[4]);
             //這裡+ ！ 指的是要回傳反向的  因為客戶壓小 而程式只須跑一次輸贏 剛好只要反向就好
+            $result = !$this->getBig($result, $item[4]);
             $this->alterData($result, $item);
 
             return $result;
@@ -71,8 +66,8 @@ class gameEnd
             return $result;
         }
         if ($item[0] == '雙') {
-            $result = !$this->getSingle($result, $item[4]);
             //這裡+ ！ 指的是要回傳反向的  因為客戶壓小 而程式只須跑一次輸贏 剛好只要反向就好
+            $result = !$this->getSingle($result, $item[4]);
             $this->alterData($result, $item);
 
             return $result;
@@ -118,16 +113,14 @@ class gameEnd
         $status = new convertStatus;
 
         if ($result) {
-            $win = $status->convertWinLostStatus('win'); //取得贏的status是多少
 
-            $array = $updatorder->update($item, $win); //更改訂單狀態 為贏
+            $array = $updatorder->update($item, 'win'); //更改訂單狀態 為贏
             if ($array[0] == false) {
                 echo $array[1];
             }
         } else {
-            $lost = $status->convertWinLostStatus('lost'); //取得輸的status是多少
 
-            $array = $updatorder->update($item, $lost); //更改訂單狀態 為輸
+            $array = $updatorder->update($item, 'lost'); //更改訂單狀態 為輸
             if ($array[0] == false) {
 
                 echo $array[1];

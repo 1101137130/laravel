@@ -39,7 +39,7 @@ class HomeController extends Controller
                 'item' => true
             ]);
         }
-
+        
         return view('home', [
             'item' => false
         ]);
@@ -47,7 +47,6 @@ class HomeController extends Controller
 
     public function game()
     {
-
         return view('test.game');
     }
 
@@ -69,6 +68,7 @@ class HomeController extends Controller
 
     public function clientorder(Request $request)
     {
+        $user = Auth::user();
         $gamestart = new gameStart;
         $ordercreate = new orderCreate;
 
@@ -82,15 +82,18 @@ class HomeController extends Controller
                 if ($data[0] != true) {
                     $request->session()->flash('error', $data[1]);
 
-                    return $data[1];
+                    return json_encode($data[1]);
                 }
             }
+
             $gameend = new gameEnd;
 
             $result = $gamestart->start();
-            
+
 
             array_push($result, $gameend->end($order, $result));
+            $winamount =Redis::get($user->username . $user->id);
+            $winamount != null ? array_push($result, $winamount):array_push($result, 0);
 
             return $result;
         } else {

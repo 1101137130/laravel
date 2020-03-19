@@ -78,6 +78,7 @@
                         @if ($item == true)
                         <a href="{{ url('/item') }}">Item</a>
                         @endif
+                        <a href="{{ url('/order') }}">Orders</a>
                         <a href="">Rules</a>
                         <a href="">Help</a>
                     </div>

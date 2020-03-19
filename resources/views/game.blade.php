@@ -76,8 +76,8 @@
                         <select class="form-control" id="object1bigsmall">
                         </select>
 
-                        <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)"  placeholder="請輸入金額" step="5" min="0">
-                        
+                        <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+
                     </td>
 
                     <td style="text-align: center;">
@@ -213,30 +213,35 @@
             },
             data: {
                 order: ordersarray
-            },
+            },        
+            async : true,
             success: function(data) {
-                $('#ob1one').html(data[0][0]);
-                $('#ob1two').html(data[1][0]);
-                $('#ob1three').html(data[2][0]);
-                $('#ob2one').html(data[0][1]);
-                $('#ob2two').html(data[1][1]);
-                $('#ob2three').html(data[2][1]);
-                $('#win1').html(data[0][2]);
-                $('#win2').html(data[1][2]);
-                $('#win3').html(data[2][2]);
-                $('#finalresult').html(toChinese(data[3]));
-                var array = new Array;
-                if (data[4] != null) {
-                    for (var i = 0; i < data[4].length; i++) {
-                        array[i] = new Array;
-                        array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
-
+                
+                console.log(data)
+                if (typeof data == string) {
+                    location.reload();
+                } else {
+                    $('#ob1one').html(data[0][0]);
+                    $('#ob1two').html(data[1][0]);
+                    $('#ob1three').html(data[2][0]);
+                    $('#ob2one').html(data[0][1]);
+                    $('#ob2two').html(data[1][1]);
+                    $('#ob2three').html(data[2][1]);
+                    $('#win1').html(data[0][2]);
+                    $('#win2').html(data[1][2]);
+                    $('#win3').html(data[2][2]);
+                    $('#finalresult').html(toChinese(data[3]));
+                    var array = new Array;
+                    if (data[4] != null) {
+                        for (var i = 0; i < data[4].length; i++) {
+                            array[i] = new Array;
+                            array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
+                        }
+                        alert(array)
                     }
-                    alert(array)
                 }
-
-
-            },
+            }
+            ,
             error: function(jqXHR) {
                 //location.reload()
                 console.log(jqXHR)

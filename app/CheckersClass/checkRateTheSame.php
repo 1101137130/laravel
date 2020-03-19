@@ -10,8 +10,10 @@ class checkRateTheSame
     {
         $itemrate=Item::find($id);
         if($itemrate->rate == $rate){
+
             return true;
         }else{
+            
             return false;
         }
     }

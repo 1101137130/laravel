@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\AmountRecord;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class AmountController extends Controller
 {
@@ -19,7 +20,6 @@ class AmountController extends Controller
 
     public function amount()
     {
-
         $user = Auth::user();
         $clientamount = Amount::where('user_id', $user->id)->first();
         if ($clientamount == null) {
@@ -30,6 +30,19 @@ class AmountController extends Controller
         return view('amount.store', ['total' => $clientamount->amount]);
     }
 
+    public function getAmount()
+    {
+        $user = Auth::user();
+        $clientamount = Amount::where('user_id', $user->id)->first();
+        if ($clientamount == null) {
+
+            return 0;
+        }
+        $winamount = Redis::get($user->username . $user->id);
+        $winamount != null ? $data = array($clientamount->amount, $winamount): $data = array($clientamount->amount, 0);
+        
+        return $data;
+    }
     public function store(Request $request)
     {
         $user = Auth::user();
