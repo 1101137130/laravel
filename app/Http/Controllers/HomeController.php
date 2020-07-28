@@ -32,22 +32,29 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-
+        $permission = [];
         if ($user['manage_rate'] == 1) {
-
-            return view('home', [
-                'item' => true
-            ]);
+            $permission['manage_rate'] = true;
+        } else {
+            $permission['manage_rate'] = false;
         }
-        
-        return view('home', [
-            'item' => false
-        ]);
+        if ($user['manager_editor'] == 1) {
+            $permission['manager_editor'] = true;
+        } else {
+            $permission['manager_editor'] = false;
+        }
+        if ($user['view_orders'] == 1) {
+            $permission['view_orders'] = true;
+        } else {
+            $permission['view_orders'] = false;
+        }
+
+        return view('home', $permission);
     }
 
     public function game()
     {
-        return view('test.game');
+        return view('game');
     }
 
     public function data()
@@ -92,8 +99,8 @@ class HomeController extends Controller
 
 
             array_push($result, $gameend->end($order, $result));
-            $winamount =Redis::get($user->username . $user->id);
-            $winamount != null ? array_push($result, $winamount):array_push($result, 0);
+            $winamount = Redis::get($user->username . $user->id);
+            $winamount != null ? array_push($result, $winamount) : array_push($result, 0);
 
             return $result;
         } else {

@@ -54,9 +54,9 @@ class ItemController extends Controller
                 $item->update(['itemname' => $e[1], 'rate' => $e[2]]);
             }
             Redis::set('isItemSetyet', false);  //修改redis資料
+            
             return null;
         } catch (Exception $e) {
-
             throw  $e;
         }
     }
@@ -67,6 +67,7 @@ class ItemController extends Controller
             'itemname' => 'required|max:15',
             'rate' => 'required',
         ]);
+        
         $item = Item::find($request->id);
 
         try {

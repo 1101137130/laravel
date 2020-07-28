@@ -57,7 +57,7 @@
                         <select class="form-control" id="object1winlost">
                         </select>
 
-                        <input id="object1winlostamount" class="form-control" type="number" onchange="dataToNap('object1winlost',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" id="object1winlostamount" class="form-control" type="number" onchange="dataToNap('object1winlost',this.id,1)" onmouseover="compute(this.id, this.value, 'object1winlost')" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                     <td style="text-align: center;">
@@ -65,7 +65,7 @@
                         <select class="form-control" id="object2winlost">
                         </select>
 
-                        <input type="number" class="form-control" id="object2winlostamount" onchange="dataToNap('object2winlost',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object2winlost')" type="number" class="form-control" id="object2winlostamount" onchange="dataToNap('object2winlost',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                 </tr>
@@ -76,8 +76,7 @@
                         <select class="form-control" id="object1bigsmall">
                         </select>
 
-                        <input type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
-
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object1bigsmall')" type="number" class="form-control" id="object1bigsmallamount" onchange="dataToNap('object1bigsmall',this.id,1)" placeholder="請輸入金額" step="5" min="0">
                     </td>
 
                     <td style="text-align: center;">
@@ -85,7 +84,7 @@
                         <select class="form-control" id="object2bigsmall">
                         </select>
 
-                        <input type="number" class="form-control" id="object2bigsmallamount" onchange="dataToNap('object2bigsmall',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object2bigsmall')" type="number" class="form-control" id="object2bigsmallamount" onchange="dataToNap('object2bigsmall',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                 </tr>
@@ -96,7 +95,7 @@
                         <select class="form-control" id="object1singledouble">
                         </select>
 
-                        <input type="number" class="form-control" id="object1singledoubleamount" onchange="dataToNap('object1singledouble',this.id,1)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object1singledouble')" type="number" class="form-control" id="object1singledoubleamount" onchange="dataToNap('object1singledouble',this.id,1)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                     <td style="text-align: center;">
@@ -104,7 +103,7 @@
                         <select class="form-control" id="object2singledouble">
                         </select>
 
-                        <input type="number" class="form-control" id="object2singledoubleamount" onchange="dataToNap('object2singledouble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
+                        <input data-toggle="tooltip" data-placement="bottom" onmouseover="compute(this.id, this.value, 'object2singledouble')" type="number" class="form-control" id="object2singledoubleamount" onchange="dataToNap('object2singledouble',this.id,2)" placeholder="請輸入金額" step="5" min="0">
 
                     </td>
                 </tr>
@@ -119,8 +118,6 @@
 </div>
 @endsection
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-</script>
 
 <script>
     window.onload = show;
@@ -135,8 +132,6 @@
             },
             success: function(data) {
 
-                // items =JSON.parse(data[0])
-                //  $('#ob1lost').html(data[1]['object1']['card']);
                 var object1winlost = document.getElementById('object1winlost')
                 var object2winlost = document.getElementById('object2winlost')
                 var object1bigsmall = document.getElementById('object1bigsmall')
@@ -169,11 +164,14 @@
 
     function alertcontents() { //建立確認訊息來提供使用者作確認是否下注用
         var array = new Array();
-
+        var posibleWinAmount = 0;
         for (var i = 0; i < ordersarray.length; i++) {
             array.push('\n' + '項目：' + convertObjectToName(ordersarray[i][4]) + ordersarray[i][0] + ' | ' +
-                '賠率為：' + ordersarray[i][2])
+                '賠率為：' + ordersarray[i][2] + ' | ' + '金額：' + ordersarray[i][3])
+            posibleWinAmount += ordersarray[i][3] * ordersarray[i][2];
         }
+
+        array.push('\n' + '預估獲利：' + posibleWinAmount)
         return array;
     }
 
@@ -213,12 +211,10 @@
             },
             data: {
                 order: ordersarray
-            },        
-            async : true,
+            },
             success: function(data) {
-                
                 console.log(data)
-                if (typeof data == string) {
+                if (typeof data == typeof 'string') {
                     location.reload();
                 } else {
                     $('#ob1one').html(data[0][0]);
@@ -231,19 +227,20 @@
                     $('#win2').html(data[1][2]);
                     $('#win3').html(data[2][2]);
                     $('#finalresult').html(toChinese(data[3]));
+                    $('#winamount').html(data[5]);
+                    getAmount();
                     var array = new Array;
                     if (data[4] != null) {
                         for (var i = 0; i < data[4].length; i++) {
                             array[i] = new Array;
                             array[i].push('\n' + '項目：' + toChinese(data[4][i][4]) + ' ' + data[4][i][0] + ' 結果：' + toWinLost(data[4][i][5]))
                         }
+
                         alert(array)
                     }
                 }
-            }
-            ,
+            },
             error: function(jqXHR) {
-                //location.reload()
                 console.log(jqXHR)
             }
         })
@@ -312,12 +309,13 @@
         }
     }
 
-    function winAmount(amount, id) {
-        var bet = $(id).val();
-        var win = amount * bet;
-    }
-
-    function compute(amount, rate) {
-        return amount * rate;
+    function compute(id, amount, rateid) {
+        var rateid = '#' + rateid;
+        var id = '#' + id
+        rate = $(rateid).val()
+        if (rate != null) {
+            var arry = rate.split(',')
+            $(id).attr('title', '預估可贏 ：' + amount * arry[2]);
+        }
     }
 </script>

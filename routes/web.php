@@ -29,4 +29,6 @@ Route::post('/amount', 'AmountController@store')->name('amount');
 Route::get('/getAmount', 'AmountController@getAmount')->name('amount');
 Route::get('/order', 'OrderController@show')->name('order');
 Route::get('/getOrder', 'OrderController@getOrder')->name('order');
+Route::get('/registerManager', 'Auth\RegisterManager@showRegistrationForm')->name('user');
+Route::get('/ninesections', 'NinesectionController@show')->name('NineSections');
 

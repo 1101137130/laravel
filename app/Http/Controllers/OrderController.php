@@ -23,16 +23,8 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $orders = Order::all();
-        $order = $orders->where('user_id', $user->id)->first();
-        return response()->json([
-            'data' => [
-                'id' => $order->id,
-                'bet_object' => $order->bet_object,
-                'status' => $order->status,
-                'amount' => $order->amount,
-                'item_rate' => $order->item_rate,
-            ]
-        ]);
+        $order = $orders->where('user_id', $user->id);
+        return json_encode($order,true);
     }
 
     public function store(Request $request)

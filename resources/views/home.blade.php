@@ -75,12 +75,14 @@
                 <div class="panel-body">
                     <div class="links">
                         <a href="{{url('show')}}">Play</a>
-                        @if ($item == true)
-                        <a href="{{ url('/item') }}">Item</a>
+                        @if ($manage_rate == true)
+                        <a href="{{ url('/item') }}">ItemManage</a>
+                        @endif
+                        @if ($manager_editor == true)
+                        <a href="{{ url('registerManager') }}">Create a Manager User</a>
                         @endif
                         <a href="{{ url('/order') }}">Orders</a>
-                        <a href="">Rules</a>
-                        <a href="">Help</a>
+                
                     </div>
                 </div>
 

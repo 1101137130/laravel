@@ -19,11 +19,11 @@
             <strong>{{$errors->first('rate')}}</strong></br>
         </span>
         @endif
-        賠率：<input type="number" name="rate" placeholder="請輸入賠率" step="0.0001" min="0.000" max="10000">
+        賠率：<input type="number" name="rate" placeholder="請輸入賠率" step="0.1000" min="0.000" max="10000">
         <input type="submit" value="新增">
 
     </form>
-    <a type=role class="btn btn-primary" onclick="allEdit()">儲存</a>
+    <p id="storeButton" hidden><a type=role class="btn btn-primary" onclick="allEdit()">儲存</a></p>
 </div>
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
@@ -188,6 +188,7 @@
     function store(i, itemid, inputnameid, rateid) {
         var tdid = '#tdid' + i;
         $(tdid).append('<a role="btn" class="btn btn-primary" onclick="ajaxToEdit(' + itemid + ',' + inputnameid + ',' + rateid + ')">儲存</a>');
+        $(storeButton).show();
     }
     //-----
     //刪除一列方法 目的是來產生新的

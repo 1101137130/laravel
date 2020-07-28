@@ -13,6 +13,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
 </head>
 
 
@@ -97,9 +98,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
     <script src="{{ asset('js/app.js') }}"></script>
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script>
         //window.onload = getAmount;
         $(function() {
@@ -114,8 +115,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
-                    $('#amount').html(data[0])
-                    $('#winamount').html(data[1])
+                    $('#amount').html(parseFloat(data[0]))
+                    $('#winamount').html(parseFloat(data[1]))
 
                 },
                 error: function(jqXHR) {
